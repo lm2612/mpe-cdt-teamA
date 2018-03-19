@@ -1,16 +1,6 @@
 import pandas as pd
 import math
 import numpy as np
-
-
-# Region_1_DR=pd.read_csv('../AIR_data/Correct_loss_data/Region_1_DR.csv')
-# print(list(Region_1_DR))
-
-
-# unique_arsid=Region_1_DR.AIRSID.unique()
-# for air_id in unique_arsid :
-# 	# For each unique AIRSID finr the mean of LOB1
-# 	print(air_id, Region_1_DR.loc[Region_1_DR['AIRSID']==air_id, 'LOB4' ].sum())
 		
 def getLOBdata(csvname):
 	# Load csv ad a dataframe object using pandas
@@ -40,12 +30,10 @@ def getLOBdata(csvname):
 	data_output = np.delete(data_output, delete_list, axis=1)
 	# Delete the names of columns not included for the dataframe
 	column_names = ['AIRSID']+lobnames
-	
-	column_names = np.delete(column_names, delete_list, axis=1)
+	column_names = np.delete(column_names, delete_list, axis=0)
 	df_output = pd.DataFrame(data_output, columns=column_names)
 
 	return df_output
 
-region1data = getLOBdata('../AIR_data/Correct_loss_data/Region_1_DR.csv')
-
+region1data = getLOBdata('../AIR_data/Correct_loss_data/Region_3_DR.csv')
 print(region1data)
