@@ -13,7 +13,7 @@ print(pd.__version__)
 
 # Load csv ad a datafarme object using pandas
 Region_1_DR=pd.read_csv('../AIR_data/Correct_loss_data/Region_1_DR.csv')
-Historial_freq = pd.read_csv('../AIR_data/Predictor_Data/GEM_HistoricalFreq.csv')
+Historical_freq = pd.read_csv('../AIR_data/Predictor_Data/GEM_HistoricalFreq.csv')
 
 Region_1_DR = pd.DataFrame(Region_1_DR)
 Region_1_DR = Region_1_DR.sort(['AIRSID'])
@@ -22,7 +22,7 @@ Region_1_DR = Region_1_DR.sort(['AIRSID'])
 unique_arsid=Region_1_DR.AIRSID.unique()
 
 aal = np.zeros((len(unique_arsid), 2))
-freq = Historial_freq.loc[Historial_freq['AIRSID'].isin(unique_arsid)]
+freq = Historical_freq.loc[Historical_freq['AIRSID'].isin(unique_arsid)]
 
 for i in range(0, len(unique_arsid)) :
 	# For each unique AIRSID find the sum of LOB1
@@ -30,7 +30,7 @@ for i in range(0, len(unique_arsid)) :
 	aal[i, 1] = Region_1_DR.loc[Region_1_DR['AIRSID'] == unique_arsid[i], 'LOB1' ].sum()
 	#freq[i] = Historial_freq.loc[Historial_freq['AIRSID']==unique_arsid[i]]
 	
-#  Historial frequencies is missing AIRSIDs 10655 and 10656 so remove 
+#  Historical frequencies is missing AIRSIDs 10655 and 10656 so remove 
 aal = np.delete(aal, (1,2), axis=0)
 
 
