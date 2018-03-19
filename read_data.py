@@ -11,21 +11,38 @@ unique_arsid=Region_1_DR.AIRSID.unique()
 #	print(air_id, Region_1_DR.loc[Region_1_DR['AIRSID']==air_id, 'LOB1' ].mean())
 
 def predictor(name):
+        """
+        Function to read in csv file and return data frame
+        """
 
         data = pd.read_csv('../AIR_data/Predictor_Data/'+name)
         return data
 
 
 def take_out_test(data):
+        """
+        Function to separate a raw data frame into
+        two data sets: one to train on (80% of data),
+        one to test on (20% of data).
 
+        These are pseudo-randomly decided; but
+        should be the same for all airsids.
+        """
+
+        # create data
         train = pd.DataFrame(columns=data.columns)
         test = pd.DataFrame(columns=data.columns)
 
+        # initialise indices
         test_index = 0
         train_index = 0
 
+        airsid_index = data.columns.get_loc('AIRSID')
+
+        # loop over rows in data
         for index, row in data.iterrows():
-                np.random.seed(row[0])
+                # seed random number based on airsid
+                np.random.seed(row[airsid_index])
 
                 if np.random.random() > 0.8:
                         test.loc[test_index] = row
