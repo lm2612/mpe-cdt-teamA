@@ -81,3 +81,38 @@ def take_out_test(data):
         return train, test
 
 
+
+def clean_data(loss_data, predictor_data, LOB, predictor):
+    #A function that takes two data frames and returns a data frame combining 
+    #loss and predictor data, taking into account that some IDs might be missing.
+    
+    # find set of unique airsids
+    unique_AIRSID=loss_data.AIRSID.unique()
+    
+    # now find shared set of unique airsids
+    predictor_data_airsid=predictor_data['AIRSID']
+    new_unique=predictor_data.loc[predictor_data_airsid.isin(loss_data['AIRSID'])]
+    
+    # find index of columns for parameters we want
+    airsid_index = new_unique.columns.get_loc('AIRSID')
+    loss_index = loss_data.columns.get_loc(LOB)
+    predictor_index = new_unique.columns.get_loc(predictor)
+    airsid_index_1=loss_data.columns.get_loc('AIRSID')
+    
+    # make empty data frame
+    final_data=pd.DataFrame(columns=(predictor,LOB))
+    
+    # loop through rows of both data sets
+    for index, row in new_unique.iterrows():
+        for index1, row1 in loss_data.iterrows():
+            
+            # if we have matching airsid, add to new data frame
+            if row[airsid_index] == row1[airsid_index_1]:
+                final_data.loc[index]=[row[predictor_index],row1[loss_index]]
+
+    return final_data
+    
+    
+    
+    
+    
