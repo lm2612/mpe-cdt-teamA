@@ -34,17 +34,29 @@ def main():
                   'TOTAL_POP', 'SUM_SEISMIC_BUDGET',
                   'USGS_HISTORICAL_FREQ']
 
+
+    D = []
+
+    data = rd.get_data_for_region(1)
+
+    for pred in predictors:
+        datap = data[pred]
+        D.append(datap.var()/datap.mean())
+
+
+
+
     # Dictionary for eigenvalues of correlation matrix whose keys are regions.
     eigs = {i : [] for i in range(1,9)}
 
-    for region in range(1,9):
+    for region in range(1,3):
         data = rd.get_data_for_region(region)
-        predictors_region = data[predictors]
+        predictors_region = np.array(D) * data[predictors]
         M = predictors_region.corr()
-        listeigs = (np.linalg.eigvals(M)).tolist()
-        eigs[region] += listeigs
+        eigs_list = (np.linalg.eigvals(M)).tolist()
+        eigs[region] += eigs_list
 
-
+    print(eigs)
 
 
 main()
