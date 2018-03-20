@@ -164,7 +164,34 @@ def combine_clean_data(loss_data, predictor_datas, LOB, predictors):
 
     return final_data
     
+
+def get_data_for_region(region):
+    """
+    Takes a region as a number and returns a combined data set
+
+    arg: region: an int denoting region
+    """
     
+    # choose which data sets to use
+    loss_data_name = '../AIR_data/Correct_loss_data/Region_'+str(region)+'_DR.csv'
+    predictor_names = ['GEM_HistoricalFreq.csv', 'Global475yrPGA.csv',
+                       'GlobalAverageSoil.csv', 'GlobalGDP_Stats.csv',
+                       'GlobalMIPC_Stats.csv', 'Global_NightLights.csv',
+                       'GlobalPopCounts.csv', 'GlobalSeismicBudget.csv',
+                       'USGS_HistoricalFreq.csv']
+
+    LOB = 'LOB1'
+    predictors = ['SUM_FREQ', 'AVERAGE_PGA_475yr',
+                  'AVERAGE_SOIL', 'TOTAL_GDP',
+                  'MEAN_MIPC', 'SUM_NIGHTLIGHTS',
+                  'TOTAL_POP', 'SUM_SEISMIC_BUDGET',
+                  'USGS_HISTORICAL_FREQ']
+
+    # import data sets
+    loss_data = rd.getLOBdata(loss_data_name)
+    predictor_datas = [rd.predictor(predictor_name) for predictor_name in predictor_names]
+
+    # clean data to use only shared airsids
+    correlation = rd.combine_clean_data(loss_data, predictor_datas, LOB, predictors)
     
-    
-    
+    return correlation
