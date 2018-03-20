@@ -188,10 +188,10 @@ def get_data_for_region(region):
                   'USGS_HISTORICAL_FREQ']
 
     # import data sets
-    loss_data = rd.getLOBdata(loss_data_name)
-    predictor_datas = [rd.predictor(predictor_name) for predictor_name in predictor_names]
+    loss_data = getLOBdata(loss_data_name)
+    predictor_datas = [predictor(predictor_name) for predictor_name in predictor_names]
 
     # clean data to use only shared airsids
-    correlation = rd.combine_clean_data(loss_data, predictor_datas, LOB, predictors)
+    correlation = combine_clean_data(loss_data, predictor_datas, LOB, predictors)
     
     return correlation
