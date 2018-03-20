@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import read_data as rd
 
-data = rd.get_data_for_region(4)
+data = rd.get_data_for_region(1)
 # Just do LOB1 for now
 LOB = 'LOB'
 # predictor are names of variables used in the multiple regression
