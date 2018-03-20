@@ -12,6 +12,7 @@ from statsmodels.formula.api import ols
 print(pd.__version__)
 
 # Load csv ad a datafarme object using pandas
+# IMPORTANT: THIS USES ALL THE DATA -- NEED TO ADD STRIPPING FOR TESTING
 Region_1_DR=pd.read_csv('../AIR_data/Correct_loss_data/Region_1_DR.csv')
 Historical_freq = pd.read_csv('../AIR_data/Predictor_Data/GEM_HistoricalFreq.csv')
 
@@ -33,6 +34,12 @@ for i in range(0, len(unique_arsid)) :
 #  Historical frequencies is missing AIRSIDs 10655 and 10656 so remove 
 aal = np.delete(aal, (1,2), axis=0)
 
+print(np.count_nonzero(aal)/len(aal))
+
+# Does taking logs make fit better?
+aal = np.log(aal)
+freq = np.log(freq)
+
 
 data = pd.DataFrame({'x': freq['SUM_FREQ'], 'y': aal[:,1]})
 
@@ -50,4 +57,6 @@ print(model._results.params)
 
 plt.scatter(freq['SUM_FREQ'], aal[:,1])
 plt.plot(X, fitted_model)
+plt.xlabel('log frequency of seismic events')
+plt.ylabel('log average annual loss')
 plt.show()
