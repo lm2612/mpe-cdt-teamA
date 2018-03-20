@@ -4,23 +4,39 @@ import numpy as np
 from read_data import * 
 import matplotlib.pyplot as plt
 
-def High_Low_Split(allregions):
-	""" Splits into high and low hazards for data frame allregions"""
-	# create data
-        high = pd.DataFrame(columns=allregions.columns)
-        low = pd.DataFrame(columns=allregions.columns)
 
+def AddDum(allregions):
+    """ Splits into high and low hazards for data frame allregions"""
+    # create data
+    allreg_plusdum= allregions.copy()
+    Select_names = ['SUM_NIGHTLIGHTS','AVERAGE_PGA_475yr','TOTAL_POP']
+    Dummy_names = ['SUM_NIGHTLIGHTS_DUM','AVERAGE_PGA_475yr_DUM','TOTAL_POP_DUM']
+    
 
-        pgas = allregions['AVERAGE_PGA_475yr']
-	mean_pga = np.mean(pgas)
-	print(mean_pga)
+    
+    for name in Dummy_names:
+        allreg_plusdum[name]= np.arange(len(allregions['AIRSID']))
+    
+     
+    for col in Select_names:
+        values = allregions[col]
+        mean = np.mean(values)
+        print(col , mean)
+        
         for index, row in allregions.iterrows():
-                if pgas[index] >= mean_pga:
-                        high.loc[index] = row
-                else:
-                        low.loc[index] = row
+            if values[index] >= mean:
+                allreg_plusdum[col+'_DUM'].loc[index] = 1.0
+                
+            else:
+                
+                allreg_plusdum[col+'_DUM'].loc[index] = 0.0
+    
+    
+    return( allreg_plusdum)
+    
+    
 
-        return high,low
+
 
 
 def get_all_regions():
@@ -36,7 +52,7 @@ def get_all_regions():
 allregions = get_all_regions()
 highhazard,lowhazard = High_Low_Split(allregions)
 
-print highhazard
+print( highhazard)
 
 
 plt.plot(highhazard['AIRSID'],highhazard['AVERAGE_PGA_475yr'],'ro')
@@ -47,3 +63,6 @@ plt.show()
 plt.clf()
 plt.plot(allregions['AIRSID'],allregions['AVERAGE_PGA_475yr'],'ko')
 plt.show()
+
+
+
